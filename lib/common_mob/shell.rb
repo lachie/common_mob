@@ -121,7 +121,7 @@ module CommonMob
     # Thanks Ara!
     def popen4(args={}, &b)
 
-      cmd = args[:cmd]
+      cmd = [ args[:cmd] ].flatten.compact * ' '
 
      
       # Do we wait for the child process to die before we yield
@@ -165,7 +165,7 @@ module CommonMob
         cmd = "sudo -H -u #{user} #{env} #{cmd}"
       end
 
-      # debug "running #{cmd} #{massaged_args(args).inspect}"
+      # puts "running cmd:|#{cmd}| #{massaged_args(args).inspect}"
       
       pwrite, pread, perror, pexception = IO.pipe, IO.pipe, IO.pipe, IO.pipe
 
