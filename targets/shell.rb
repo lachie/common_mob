@@ -54,3 +54,26 @@ class Sh < AngryMob::Target
 
   end
 end
+
+
+class ShFalse < Sh
+  include CommonMob::ShellHelper
+
+  default_action
+  def execute
+    result = sh(script, opts).execute
+
+    if result.ok?
+      ui.log "command was true"
+    else
+      @should_fire = true
+    end
+  end
+
+
+  def state
+    {
+      :fire => @should_fire
+    }
+  end
+end
