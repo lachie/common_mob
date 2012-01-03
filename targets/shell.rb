@@ -35,7 +35,7 @@ class Sh < AngryMob::Target
   def opts
     opts = AngryHash[ args ]
 
-    opts.delete_all_of(%w{notify action default_object creates})
+    opts.delete_all_of(%w{notify action default_object creates fire})
 
     opts
   end
