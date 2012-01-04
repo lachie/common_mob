@@ -8,8 +8,25 @@ class Service < AngryMob::Target
 
 
   class << self
-    def instance_key(args)
-      "service:#{nickname}"
+    Styles = {
+      'sysv'    => CommonMob::Services::Styles::Sysv,
+      'pid'     => CommonMob::Services::Styles::Pid,
+      'debian'  => CommonMob::Services::Styles::Debian,
+      'upstart' => CommonMob::Services::Styles::Upstart,
+      'monit'   => CommonMob::Services::Styles::Monit
+    }
+
+    def build(nickname, options={})
+      svc_klass = Class.new(Service) do
+        styles = [ options[:style], options[:styles] ].flatten.compact
+
+        styles.map {|s|
+          Styles[s.to_s] || raise("unknown service style #{s}")
+        }.each {|mod| include mod}
+
+        service_name(options[:name]) if options[:name]
+      end
+      AngryMob::Target::Tracking.register_klass_file svc_klass, nickname
     end
 
 
